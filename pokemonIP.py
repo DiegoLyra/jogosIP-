@@ -7,10 +7,9 @@ def menu():
 def mostrar_pokedex():
     global pokedex
     print(pokedex.keys())
-    digito = 3
+    digito = input("Digite\n1 para Listar Detalhes\n2 para Apagar Registro\n0 para voltar ao Menu Principal\n")
+    digito = int(verificar_acao(digito, ('1','2','0')))
     while digito != 0:
-        digito = input("Digite\n1 para Listar Detalhes\n2 para Apagar Registro\n0 para voltar ao Menu Principal\n")
-        digito = int(verificar_acao(digito, ('1','2','0')))
         if digito == 1:
             nome_pokemon = input("Digite o nome do pokemon que você deseja ver detalhes:")
             nome_pokemon = verificar_acao(nome_pokemon, pokedex.keys())
@@ -18,8 +17,7 @@ def mostrar_pokedex():
         elif digito == 2:
             nome_pokemon = input("Digite o nome do pokemon que você deseja apagar:")
             pokedex[nome_pokemon] = {}
-        
-    return digito, nome_pokemon
+        return digito, nome_pokemon
 
 def pokemon_apareceu():
     global pokedex, entrada
