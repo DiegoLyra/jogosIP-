@@ -7,7 +7,7 @@ def menu():
 def mostrar_pokedex():
     global pokedex
     print(pokedex.keys())
-    digito = 1
+    digito = 3
     while digito != 0:
         digito = input("Digite\n1 para Listar Detalhes\n2 para Apagar Registro\n0 para voltar ao Menu Principal\n")
         digito = int(verificar_acao(digito, ('1','2','0')))
