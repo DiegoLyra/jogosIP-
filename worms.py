@@ -82,14 +82,17 @@ def atributos(dicionario):
 
 def mover(dicionario, anda):
     global game
-    if anda == 4:
+    if anda == 4 and dicionario['Posição'] > 0:
         dicionario['Posição'] = dicionario['Posição'] - 1
         dicionario['Direção'] = -1
         dicionario['Combustível'] -= 1
-    else:
+    elif anda == 6 and dicionario['Posição'] < 69:
         dicionario['Posição'] = dicionario['Posição'] + 1
         dicionario['Direção'] = +1
         dicionario['Combustível'] -= 1
+    else:
+        print("Não é possível mover nessa direção!")
+
     if dicionario['Combustível'] == 0:
         print("Você perdeu. Combustível: {}".format(dicionario['Combustível']))
         game = 2
