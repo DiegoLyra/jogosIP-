@@ -47,7 +47,7 @@ def configurar(nome1, nome2):
 
 def verificar(opcao, possivelEscolha):
     while not opcao in possivelEscolha:
-        opcao = int(input("Entrada inválida. Digite novamente."))
+        opcao = int(input("Entrada inválida. Digite novamente.\n"))
     return opcao
 
 matriz = []
@@ -90,14 +90,13 @@ def mover(dicionario, anda):
         dicionario['Posição'] = dicionario['Posição'] + 1
         dicionario['Direção'] = +1
         dicionario['Combustível'] -= 1
-    if dicionario['Combustível']-1 == 0:
+    if dicionario['Combustível'] == 0:
         print("Você perdeu. Combustível: {}".format(dicionario['Combustível']))
         game = 2
     return anda
 
 def ajustar_angulo(dicionario):
-    angulo = int(input("Deseja aumentar [8], diminuir [2] ou trave o ângulo [0]?\n"))
-    angulo = verificar(angulo, (8,2,0))
+    angulo = 1
     while angulo != 0:
         angulo = int(input("Deseja aumentar [8], diminuir [2] ou trave o ângulo [0]?\n"))
         angulo = verificar(angulo, (8,2,0))
@@ -107,36 +106,40 @@ def ajustar_angulo(dicionario):
             print(*linha)
         if angulo == 8:
             dicionario['Ângulo'] += 1
-            if dicionario['Ângulo'] > 60:
-                print("Ângulo máximo. Seu ângulo: {}".format(dicionario['Ângulo']-1))
+            if dicionario['Ângulo'] >= 120:
+                dicionario['Ângulo'] = 120  
+                print("Ângulo máximo. Seu ângulo: {}".format(dicionario['Ângulo']))
         else:
             dicionario['Ângulo'] -= 1
-            if dicionario['Ângulo'] < 30:
-                print("Ângulo mínimo. Seu ângulo: {}".format(dicionario['Ângulo']+1))   
+            if dicionario['Ângulo'] <= 30:
+                dicionario['Ângulo'] = 30  
+                print("Ângulo mínimo. Seu ângulo: {}".format(dicionario['Ângulo']))
     print("Ângulo travado. Seu ângulo: {}".format(dicionario['Ângulo']))
 
 def atirar(dicionario, adversario):
-    angulo_rad= math.radians(dicionario['Ângulo'])
-    calculo = (200 * math.sin(2 * angulo_rad))/9.8
+    global game
+    radianos = math.radians(dicionario['Ângulo'])
+    calculo = int((200 * math.sin(2 * radianos))/9.8)
     dicionario['Municao'] -= 1
     if dicionario['Municao'] == 0:
         print("Você perdeu por falta de munição!")
         game = 2
-
     else:
         if dicionario['Direção'] == 1:
             bala = dicionario['Posição']+calculo
         else:
             bala = dicionario['Posição']-calculo
-        if bala == adversario['Posição']:
-            print("Você acertou {}, parabéns {}.".format(adversario['Nome'], dicionario['Nome']))
+        if calculo > 69:
+            print("O projétil ultrapassou os limites do mapa!")
+        elif bala == adversario['Posição']:
+            print("Você acertou {}, parabéns {}!".format(adversario['Nome'], dicionario['Nome']))
             game = 2
         elif bala == dicionario['Posição']:
             print("Você morreu.")
             game = 2
         else:
-            print("Você não acertou nada!")
-            return
+            print("Você acertou o chão em {}".format(bala))
+    return calculo, bala
 
 def primeiro_jogador(dicionario, adversario):
     imprimir_terreno()
@@ -166,7 +169,7 @@ def primeiro_jogador(dicionario, adversario):
         else:
             print("Turno encerrado")
             y = 0 
-    return andar, digito
+    return digito
 
 x = 1
 while x != 0:
@@ -190,7 +193,6 @@ while x != 0:
                 primeiro_jogador(dic2, dic1)
         entrada = int(input())
         entrada = verificar(entrada, (1,2,0))
-
     else:
         print("Desligando...")
         x = 0
